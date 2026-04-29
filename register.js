@@ -57,6 +57,7 @@ async function registerAccount(email, mailPass) {
   console.log(`${token}`)
   try {
     token = await getMailToken(email, mailPass);
+    console.log(`\n📩 Token: ${token}`);
     console.log('✅ Đăng nhập mail thành công!');
   } catch (err) {
     console.error(`❌ Lỗi đăng nhập mail ${email}: ${err.message}`);
@@ -67,13 +68,17 @@ async function registerAccount(email, mailPass) {
   const page = await browser.newPage();
 
   try {
-    await page.goto('https://account.garena.com/register', { waitUntil: 'networkidle2' });
-    await page.waitForSelector('input[name="email"]', { timeout: 15000 });
+    await page.goto('https://sso.garena.com/universal/register', { waitUntil: 'networkidle2' });
+    await page.waitForSelector('input[placeholder="Email"]', { timeout: 15000 });
 
-    await page.type('input[name="email"]', email);
-    await page.type('input[name="username"]', username);
-    await page.type('input[name="password"]', password);
-    await page.type('input[name="re_password"]', password);
+    await page.type('input[placeholder="Email"]', email);
+    await page.type('input[placeholder="Username"]', username);
+    await page.type('input[placeholder="Password"]', password);
+    await page.type('input[placeholder="Re-enter password"]', password);
+
+    await page.waitForSelector('select', { timeout: 15000 });
+    await page.select('select', 'VN');
+
     await page.click('button[type="submit"]');
 
     const verifyCode = await getVerifyCode(token);
