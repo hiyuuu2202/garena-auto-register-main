@@ -54,6 +54,7 @@ async function registerAccount(email, mailPass) {
   console.log(`\n📩 Đang xử lý: ${email}`);
 
   let token;
+  console.log(`${token}`)
   try {
     token = await getMailToken(email, mailPass);
     console.log('✅ Đăng nhập mail thành công!');
@@ -101,7 +102,7 @@ async function registerAccount(email, mailPass) {
   }
 
   let emails = fs.readFileSync('mails.txt', 'utf8').trim().split('\n');
-  const toRegister = emails.slice(0, 20); // lấy 20 email đầu tiên
+  const toRegister = emails.slice(0, 1); // lấy 20 email đầu tiên
 
   for (let line of toRegister) {
     const [email, pass] = line.trim().split('|');
@@ -111,8 +112,8 @@ async function registerAccount(email, mailPass) {
   }
 
   // Cập nhật lại mails.txt: xóa 20 dòng đầu
-  emails = emails.slice(20);
+  emails = emails.slice(1);
   fs.writeFileSync('mails.txt', emails.join('\n'), 'utf8');
 
-  console.log('\n🎉 Hoàn tất xử lý 20 tài khoản!');
+  console.log('\n🎉 Hoàn tất xử lý 1 tài khoản!');
 })();
